@@ -2,34 +2,39 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 
-
-
 const AddEvent = (props) => {
-  const [event, setEvent] = useState("");
+  const [eventForm, setNewEvent] = useState({
+    imie: '',
+    nazwisko: '',
+    kurs: '',
+    lokalizacja: '',
+  });
 
   const handleInputChange = (e) => {
     const target = e.target;
-    setEvent(target.value);
+    const name = target.name;
+
+    setNewEvent({
+      ...eventForm,
+      [name]: target.value,
+    });
   };
 
   const handleSubmitAddEvent = (e) => {
     e.preventDefault();
-    let eventNew = {
-      imie: "imie",
-      nazwisko: "nazwisko",
-      kurs: "kurs",
-      lokalizacja: "lokalizacja",
+    let newEvent = {
+      imie: eventForm.imie,
+      nazwisko: eventForm.nazwisko,
+      kurs: eventForm.kurs,
+      lokalizacja: eventForm.lokalizacja,
     };
-    if (!event) {
-      return;
-    }
 
     axios
-      .post("http://localhost:3000/add:", JSON.stringify(eventNew))
+      .post("http://localhost:5000/json/add", newEvent)
       .then((req) => {
         let reqData = req.data;
+        
         console.log(reqData);
-        props.getPrevEvents();
       })
 
       .catch((error) => {
@@ -70,7 +75,8 @@ const AddEvent = (props) => {
         <option> CSS </option>
         <option> JavaScript </option>
         <option> REACT </option>
-      </select> <br />
+      </select>{" "}
+      <br />
       <label> lokalizacja </label>
       <select
         onChange={handleInputChange}
@@ -83,8 +89,10 @@ const AddEvent = (props) => {
         <option> Warszawa </option>
         <option> Wrocław </option>
         <option> Gdańsk </option>
-      </select><br />
+      </select>
+      <br />
       <button>Zapisz się na kurs</button>
+      
       <br />
     </form>
   );

@@ -1,49 +1,84 @@
 import axios from "axios";
-import  './Events.css'
+import "./Events.css";
 
+import Moment from "react-moment";
+import "moment-timezone";
 
+const Events = (props) => {
 
-const Event = (props) => {
-  const deleteEvent = (id) => {
+  const handleDelete = (e) => {
+    e.preventDefault();
+ 
+let id = (props.events._id)
     axios
-      .event("http://localhost:3000/json", { _id: id })
+    
+      .post("http://localhost:5000/ison/del/id", { _id: id})
       .then((req) => {
-        props.setEvents((events) => {
-          return events.filter((event) => event.id !== req.data.id);
-        });
+        // let reqData = req.data;
+        // console.log(reqData);
       })
+
       .catch((error) => {
         console.error(error);
       });
   };
 
   return (
-  
     <table>
+      <thead>
         <tr>
-            <th >imię</th>
-            <th >nazwisko</th>
-            <th >kurs</th>
-            <th >lokalizacja</th>
-            <th >zapisano</th>
-            <th >zmodyfikowano</th>
-            <th >opcje</th>
+          <th>imię</th>
+          <th>nazwisko</th>
+          <th>kurs</th>
+          <th>lokalizacja</th>
+          <th>zapisano</th>
+          <th>zmodyfikowano</th>
+          <th>opcje</th>
         </tr>
-            <td>{props.imie}</td>
-            <td>{props.nazwisko}</td>
-            <td>{props.kurs}</td>
-            <td>{props.lokalizacja}</td>
-            <td >{props.zapisano}</td>
-            <td>{props.zmodyfikowano}</td>
-            <td> <button className="btn-del" onClick={() => deleteEvent(props.event.id)}> Usuń event </button> </td>
+      </thead>
+      <tbody>
+        {props.events.map((event) => {
+          return (
+            <tr key={event._id}>
+              <td>{event.imie}</td>
+              <td>{event.nazwisko}</td>
+              <td>{event.kurs}</td>
+              <td>{event.lokalizacja}</td>
+              <td>
+                <Moment
+                  parse="YYYY-MM-DD-T-hh:mm:ss.0100"
+                  format="YYYY-MM-DD HH:mm"
+                  utc
+                  local
+                >
+                  {event.zapisano}{" "}
+                </Moment>
+              </td>
 
-</table>
-
-      
-   
-           
-    
+              <td>
+                <Moment
+                  parse="YYYY-MM-DD-T-hh:mm:ss.oooo"
+                  format="YYYY-MM-DD HH:mm"
+                  utc
+                  local
+                >
+                  {event.zmodyfikowano}
+                </Moment>
+              </td>
+              <td>
+                <input
+                  type="button"
+                  name="submit"
+                  value="Delete"
+                  onClick={handleDelete}
+                />
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
   );
 };
 
-export default Event;
+export default Events;

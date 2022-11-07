@@ -1,10 +1,10 @@
-import Events from './views/Events';
+import EventsView from './views/EventsView';
 
 const App =(props) => {
   return (
     <div>
       <header>
-        <Events />
+        <EventsView />
       </header>
     </div>
   );
