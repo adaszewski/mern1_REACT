@@ -5,23 +5,19 @@ import Moment from "react-moment";
 import "moment-timezone";
 
 const Events = (props) => {
-
-  const handleDelete = (e) => {
-    e.preventDefault();
+  const handleDelete = (id) => {
  
-let id = (props.events._id)
     axios
-    
-      .post("http://localhost:5000/ison/del/id", { _id: id})
+      .delete("http://localhost:5000/api/event/del/"+id)
       .then((req) => {
-        // let reqData = req.data;
-        // console.log(reqData);
+        let reqData = req.data;
+        console.log(reqData);
       })
 
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+   }; 
 
   return (
     <table>
@@ -56,22 +52,18 @@ let id = (props.events._id)
               </td>
 
               <td>
-                <Moment
+               { event.zmodyfikowano? <Moment
                   parse="YYYY-MM-DD-T-hh:mm:ss.oooo"
                   format="YYYY-MM-DD HH:mm"
                   utc
                   local
                 >
                   {event.zmodyfikowano}
-                </Moment>
+                </Moment>:"-" } 
               </td>
               <td>
-                <input
-                  type="button"
-                  name="submit"
-                  value="Delete"
-                  onClick={handleDelete}
-                />
+                <button name="submit" onClick=  { () => handleDelete(event._id) } > usuń </button>
+                <button name="submit" onClick={handleDelete} > modyfikuj </button>
               </td>
             </tr>
           );
