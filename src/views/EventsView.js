@@ -9,7 +9,7 @@ const EventsView = (props) => {
 
   const getEvents = () => {
     axios
-      .get("http://localhost:5000/json")
+      .get("http://localhost:5000/api/event/all")
       .then((req) => {
         setEvents(req.data);
       })

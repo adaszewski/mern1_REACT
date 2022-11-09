@@ -30,10 +30,9 @@ const AddEvent = (props) => {
     };
 
     axios
-      .post("http://localhost:5000/json/add", newEvent)
+      .post("http://localhost:5000/api/event/add", newEvent)
       .then((req) => {
         let reqData = req.data;
-        
         console.log(reqData);
       })
 
