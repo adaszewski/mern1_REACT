@@ -44,8 +44,6 @@ const Events = (props) => {
                 <Moment
                   parse="YYYY-MM-DD-T-hh:mm:ss.0100"
                   format="YYYY-MM-DD HH:mm"
-                  utc
-                  local
                 >
                   {event.zapisano}{" "}
                 </Moment>
@@ -55,8 +53,6 @@ const Events = (props) => {
                { event.zmodyfikowano? <Moment
                   parse="YYYY-MM-DD-T-hh:mm:ss.oooo"
                   format="YYYY-MM-DD HH:mm"
-                  utc
-                  local
                 >
                   {event.zmodyfikowano}
                 </Moment>:"-" } 

@@ -20,12 +20,17 @@ const EventsView = (props) => {
 
   useEffect(() => {
     getEvents();
-  });
+  }, []);
 
   return (
     <div className="home">
-      {<AddEvent />}
-      <Events events={events} setEvents={setEvents} key={events.id} />;
+      <AddEvent
+        // errors={props.errors}
+        // setErrors={props.setErrors}
+        // setSignUpMessage={props.setSignUpMessage}
+        // signUpMessage={props.signUpMessage}
+      />
+      <Events events={events} setEvents={setEvents} key={events.id} />
     </div>
   );
 };
