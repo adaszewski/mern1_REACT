@@ -24,14 +24,10 @@ const EventsView = (props) => {
 
   return (
     <div className="home">
-      <AddEvent
-        // errors={props.errors}
-        // setErrors={props.setErrors}
-        // setSignUpMessage={props.setSignUpMessage}
-        // signUpMessage={props.signUpMessage}
-      />
+      <AddEvent    />
       <Events events={events} setEvents={setEvents} key={events.id} />
     </div>
   );
 };
+
 export default EventsView;
