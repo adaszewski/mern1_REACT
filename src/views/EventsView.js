@@ -24,7 +24,7 @@ const EventsView = (props) => {
 
   return (
     <div className="home">
-      <AddEvent    />
+      <AddEvent />
       <Events events={events} setEvents={setEvents} key={events.id} />
     </div>
   );

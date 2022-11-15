@@ -1,23 +1,40 @@
 import axios from "axios";
 import "./Events.css";
-
+import { useState, useEffect } from "react";
 import Moment from "react-moment";
 import "moment-timezone";
 
 const Events = (props) => {
+  const [eventId, setEventId] = useState();
+
+  // const getEvent = (eventId) => {
+  //   axios
+  //     .get("http://localhost:5000/api/event/"+ eventId)
+  //     .then((req) => {
+  //       setEventId(req.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
+
+  // useEffect(() => {
+  //   getEvent();
+  // }, []);
+
   const handleDelete = (id) => {
- 
     axios
-      .delete("http://localhost:5000/api/event/del/"+id)
+      .delete("http://localhost:5000/api/event/del/" + id)
       .then((req) => {
         let reqData = req.data;
         console.log(reqData);
       })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-   }; 
+  console.log(eventId);
 
   return (
     <table>
@@ -50,16 +67,24 @@ const Events = (props) => {
               </td>
 
               <td>
-               { event.zmodyfikowano? <Moment
-                  parse="YYYY-MM-DD-T-hh:mm:ss.oooo"
-                  format="YYYY-MM-DD HH:mm"
-                >
-                  {event.zmodyfikowano}
-                </Moment>:"-" } 
+                {event.zmodyfikowano > event.zapisano ? (
+                  <Moment
+                    parse="YYYY-MM-DD-T-hh:mm:ss.oooo"
+                    format="YYYY-MM-DD HH:mm"
+                  >
+                    {event.zmodyfikowano}
+                  </Moment>
+                ) : (
+                  "-"
+                )}
               </td>
               <td>
-                <button name="submit" onClick=  { () => handleDelete(event._id) } > usuń </button>
-                <button name="submit" onClick={handleDelete} > modyfikuj </button>
+                <button name="submit" onClick={() => handleDelete(event._id)}>
+                  usuń
+                </button>
+                <button name="submit" onClick={() => setEventId(event._id)}>
+                  modyfikuj
+                </button>
               </td>
             </tr>
           );

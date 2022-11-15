@@ -3,7 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 
 const AddEvent = (props) => {
-  const [eventForm, setNewEvent] = useState({
+  const [eventForm, setEventForm] = useState({
     imie: "",
     nazwisko: "",
     kurs: "",
@@ -23,7 +23,7 @@ const AddEvent = (props) => {
     const target = e.target;
     const name = target.name;
 
-    setNewEvent({
+    setEventForm({
       ...eventForm,
       [name]: target.value,
     });
@@ -106,12 +106,22 @@ const AddEvent = (props) => {
         };
       });
     } else {
-      validError.kurs = false;
+      validError.lokalizacja = false;
       setErrors((prevErrors) => {
         return { ...prevErrors, lokalizacja: "" };
       });
     }
+
+    return(
+      !validError.imie &&
+      !validError.nazwisko &&
+      !validError.kurs &&
+      !validError.lokalizacja
+    )
+
+
   };
+
 
   const handleSubmitAddEvent = (e) => {
     e.preventDefault();
@@ -130,6 +140,14 @@ const AddEvent = (props) => {
       .post("http://localhost:5000/api/event/add", newEvent)
       .then((req) => {
         let reqData = req.data;
+        setEventForm(
+          {
+            imie: "",
+            nazwisko: "",
+            kurs: "",
+            lokalizacja: "",
+          }
+        )
         setSignMessage(
           `Użytkownik ${eventForm.imie} ${eventForm.nazwisko}  został zapisany na kurs`
         );
@@ -152,6 +170,7 @@ const AddEvent = (props) => {
           type="text"
           name="imie"
           placeholder="imię"
+          value={eventForm.imie}
         />
         <br />
         <label>nazwisko</label>{" "}
@@ -161,6 +180,7 @@ const AddEvent = (props) => {
           type="text"
           name="nazwisko"
           placeholder="nazwisko"
+          value={eventForm.nazwisko}
         />
         <br />
         <label> kurs </label>
@@ -170,8 +190,9 @@ const AddEvent = (props) => {
           type="text"
           name="kurs"
           placeholder="wybierz kurs"
+          
         >
-          <option> - wybierz kurs </option>
+          <option value={!eventForm.kurs?"selected":""}> - wybierz kurs </option>
           <option value="HTML"> HTML </option>
           <option value="CSS"> CSS </option>
           <option value="JavaSript"> JavaScript </option>
@@ -186,7 +207,7 @@ const AddEvent = (props) => {
           name="lokalizacja"
           placeholder="wybierz lokalizację"
         >
-          <option> - wybierz lokalizację </option>
+          <option value={!eventForm.lokalizacja?"selected":""}>  - wybierz lokalizację </option>
           <option> Kraków </option>
           <option> Warszawa </option>
           <option> Wrocław </option>
