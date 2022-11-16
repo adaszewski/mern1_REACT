@@ -2,10 +2,12 @@ import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import AddEvent from "../components/Form";
+
 import Events from "../components/Events";
 
 const EventsView = (props) => {
   const [events, setEvents] = useState([]);
+  const [eventId, setEventId] = useState([]);
 
   const getEvents = () => {
     axios
@@ -24,8 +26,15 @@ const EventsView = (props) => {
 
   return (
     <div className="home">
-      <AddEvent />
-      <Events events={events} setEvents={setEvents} key={events.id} />
+      <AddEvent eventId={eventId} setEventId={setEventId} />
+      
+      <Events
+        events={events}
+        setEvents={setEvents}
+        key={events.id}
+        eventId={eventId}
+        setEventId={setEventId}
+      />
     </div>
   );
 };

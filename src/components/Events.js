@@ -1,26 +1,10 @@
 import axios from "axios";
 import "./Events.css";
-import { useState, useEffect } from "react";
+// import { useState } from "react";
 import Moment from "react-moment";
 import "moment-timezone";
 
 const Events = (props) => {
-  const [eventId, setEventId] = useState();
-
-  // const getEvent = (eventId) => {
-  //   axios
-  //     .get("http://localhost:5000/api/event/"+ eventId)
-  //     .then((req) => {
-  //       setEventId(req.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   getEvent();
-  // }, []);
 
   const handleDelete = (id) => {
     axios
@@ -34,7 +18,7 @@ const Events = (props) => {
       });
   };
 
-  console.log(eventId);
+
 
   return (
     <table>
@@ -82,7 +66,18 @@ const Events = (props) => {
                 <button name="submit" onClick={() => handleDelete(event._id)}>
                   usuń
                 </button>
-                <button name="submit" onClick={() => setEventId(event._id)}>
+                <button
+                  name="submit"
+                  onClick={() =>
+                    props.setEventId({
+                      _id: event._id,
+                      imie: event.imie,
+                      nazwisko: event.nazwisko,
+                      kurs: event.kurs,
+                      lokalizacja: event.lokalizacja,
+                    })
+                  }
+                >
                   modyfikuj
                 </button>
               </td>

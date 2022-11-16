@@ -4,10 +4,10 @@ import axios from "axios";
 
 const AddEvent = (props) => {
   const [eventForm, setEventForm] = useState({
-    imie: "",
-    nazwisko: "",
-    kurs: "",
-    lokalizacja: "",
+    imie: props.eventId.imie,
+    nazwisko: props.eventId.nazwisko,
+    kurs: props.eventId.kurs,
+    lokalizacja: props.eventId.lokalizacja,
   });
 
   const [errors, setErrors] = useState({
@@ -112,16 +112,13 @@ const AddEvent = (props) => {
       });
     }
 
-    return(
+    return (
       !validError.imie &&
       !validError.nazwisko &&
       !validError.kurs &&
       !validError.lokalizacja
-    )
-
-
+    );
   };
-
 
   const handleSubmitAddEvent = (e) => {
     e.preventDefault();
@@ -140,14 +137,46 @@ const AddEvent = (props) => {
       .post("http://localhost:5000/api/event/add", newEvent)
       .then((req) => {
         let reqData = req.data;
-        setEventForm(
-          {
-            imie: "",
-            nazwisko: "",
-            kurs: "",
-            lokalizacja: "",
-          }
-        )
+        setEventForm({
+          imie: "",
+          nazwisko: "",
+          kurs: "",
+          lokalizacja: "",
+        });
+        setSignMessage(
+          `Użytkownik ${eventForm.imie} ${eventForm.nazwisko}  został zapisany na kurs`
+        );
+        console.log(reqData);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+
+  const modEvent = (e) => {
+    e.preventDefault();
+    if (!validate()) {
+      return;
+    }
+
+    let modEvent = {
+      imie: eventForm.imie,
+      nazwisko: eventForm.nazwisko,
+      kurs: eventForm.kurs,
+      lokalizacja: eventForm.lokalizacja,
+    };
+
+    axios
+      .put("http://localhost:5000/api/event/"+(props.eventId.id), modEvent)
+      .then((req) => {
+        let reqData = req.data;
+        setEventForm({
+          imie: "",
+          nazwisko: "",
+          kurs: "",
+          lokalizacja: "",
+        });
         setSignMessage(
           `Użytkownik ${eventForm.imie} ${eventForm.nazwisko}  został zapisany na kurs`
         );
@@ -161,7 +190,11 @@ const AddEvent = (props) => {
   return (
     <div>
       <h3> {signMessage} </h3>
-      <h2> Formularz zapisu kandydatów na szkolenie</h2>
+      {props.eventId ? (
+        <h2> Formularz zapisu kandydatów na szkolenie</h2>
+      ) : (
+        <h2> korekta</h2>
+      )}
       <form onSubmit={handleSubmitAddEvent}>
         <label>imie</label>{" "}
         <input
@@ -170,7 +203,8 @@ const AddEvent = (props) => {
           type="text"
           name="imie"
           placeholder="imię"
-          value={eventForm.imie}
+          // defaultValue={props.eventId.imie}
+          defaultValue={props.eventId.imie}
         />
         <br />
         <label>nazwisko</label>{" "}
@@ -180,7 +214,7 @@ const AddEvent = (props) => {
           type="text"
           name="nazwisko"
           placeholder="nazwisko"
-          value={eventForm.nazwisko}
+          defaultValue={props.eventId.nazwisko}
         />
         <br />
         <label> kurs </label>
@@ -190,9 +224,9 @@ const AddEvent = (props) => {
           type="text"
           name="kurs"
           placeholder="wybierz kurs"
-          
+          defaultValue={props.eventId.kurs}
         >
-          <option value={!eventForm.kurs?"selected":""}> - wybierz kurs </option>
+          <option> - wybierz kurs </option>
           <option value="HTML"> HTML </option>
           <option value="CSS"> CSS </option>
           <option value="JavaSript"> JavaScript </option>
@@ -206,8 +240,9 @@ const AddEvent = (props) => {
           type="text"
           name="lokalizacja"
           placeholder="wybierz lokalizację"
+          defaultValue={props.eventId.lokalizacja}
         >
-          <option value={!eventForm.lokalizacja?"selected":""}>  - wybierz lokalizację </option>
+          <option> - wybierz lokalizację </option>
           <option> Kraków </option>
           <option> Warszawa </option>
           <option> Wrocław </option>
@@ -215,6 +250,7 @@ const AddEvent = (props) => {
         </select>
         <br />
         <button>Zapisz się na kurs</button>
+        <button onClick={() => modEvent(props.eventId.id)} >skoryguj kurs</button>
         <br />
       </form>
       <p> {errors.imie} </p>
